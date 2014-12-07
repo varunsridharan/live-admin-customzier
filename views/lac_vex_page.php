@@ -7,7 +7,7 @@ if(!empty($files)){
         <thead>
             <tr>
                 <th>Theme Name</th>
-                <th>Created Time</th>
+                <th>Created / Updated Time</th>
                 <th>Colour Schema</th>
                 <th>Created By</th>
                 <th>Options</th>
@@ -33,7 +33,8 @@ if(!empty($files)){
                     <td>'. date('Y/m/d | h:i s a',$MetaData['ctime']).'</td>
                     <td class="colorschema"> <div class="colorSchema"> '.$actualDivColor.' </div> </td>
                     <td>'.$MetaData['cby'].'</td>
-                    <td><input data-css-url="'.$css_url.'" data-slug="'.$MetaData['slug'].'"  type="button" class="preview_btn button button-primary" value="Preview" /> 
+                    <td><a href="'.admin_url('admin.php?page=live-admin-customizer&action=edit&theme='.$MetaData['slug']).'" class="preview_btn button ">Edit </a>
+                        <input data-css-url="'.$css_url.'" data-slug="'.$MetaData['slug'].'"  type="button" class="preview_btn button button-primary" value="Preview" /> 
                         <input data-slug="'.$MetaData['slug'].'"  type="button" class="delete button button-secondary" value="X" /></td>
                     </tr>';                    
 

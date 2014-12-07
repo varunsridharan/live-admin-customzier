@@ -18,7 +18,6 @@ class Live_Admin_Customizer_Scss_Builder {
  	public $defined_functions;
  	public $defined_base_scss;
  	public $post_colors;
-	
 	/**
 	 * Generates SCSS Code, Requires SCSS Complier Files
 	 * @since 0.1
@@ -75,7 +74,7 @@ class Live_Admin_Customizer_Scss_Builder {
 				"menu-submenu-focus-text", "menu-submenu-current-text", "menu-bubble-text", "menu-bubble-background", 
 				"menu-bubble-current-text", "menu-bubble-current-background", "menu-collapse-text", "menu-collapse-icon", 
 				"menu-collapse-focus-text", "menu-collapse-focus-icon", "adminbar-avatar-frame", "adminbar-input-background", 
-				"menu-customizer-text");
+				"menu-customizer-text","secondary-button-color");
 	}
 	
 	/**

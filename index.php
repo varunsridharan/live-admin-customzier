@@ -2,7 +2,7 @@
 /**
  * Live Admin Customizer
  *
- * Create Beautifyl Admin Themes With
+ * Create Beautifyl Admin Themes With Live Admin Customizer
  *
  * @package Live_Admin_Customizer
  * @subpackage Main
@@ -11,10 +11,10 @@
 /**
  * Plugin Name: Live Admin Customizer
  * Plugin URI:  http://varunsridharan.in/
- * Description: Create Beautifyl Admin Themes With
+ * Description: Create Beautifyl Admin Themes With Live Admin Customizer
  * Author:      Varun Sridharan
  * Author URI:  http://varunsridharan.in/
- * Version:     0.1
+ * Version:     0.2
  * License:     GPL
  */
 
@@ -35,6 +35,7 @@ class Live_Admin_Customizer {
 	public $scss_complier;
 	public $lac_pages;
 	public $css_files;
+	public $scss_output;
 	
 	/**
 	 * @since 0.1
@@ -44,13 +45,13 @@ class Live_Admin_Customizer {
 		$this->lac_v = '0.1';
 		register_activation_hook( __FILE__, array($this ,'_activate') ); 
 		add_action('admin_menu', array($this,'add_menu'));
-
+        
 		# Include Required Files
 		require_once(lac_path."inc/class_lac_page.php");
 		require_once(lac_path."inc/class_scss_builder.php");
 		$this->scss_complier = new Live_Admin_Customizer_Scss_Builder() ;
 		$this->lac_pages = new Live_Admin_Customizer_Page() ;
-		
+        $this->edit_exSCSS();
 		# Add Custom Styles To Profile View 
 		add_action( 'admin_init' ,array($this,'enque_user_styles'));
 		
@@ -82,8 +83,8 @@ class Live_Admin_Customizer {
 	 */
 	public function add_menu(){
 		$page1 = add_menu_page('Live Admin Customizer', 'Live Admin Customizer', 'administrator','live-admin-customizer', array($this->lac_pages,'lac_page') );
-		$page2 = add_submenu_page('live-admin-customizer', 'Create New Theme', 'Create New Theme', 'administrator', 'live-admin-customizer',array($this->lac_pages,'lac_page') );
-		$page3 = add_submenu_page('live-admin-customizer', 'View Existing', 'View Existing', 'administrator', 'lac-view-existing-page', array($this->lac_pages,'lac_vex_page'));
+		$page2 = add_submenu_page('live-admin-customizer', 'Create New', 'Create New', 'administrator', 'live-admin-customizer',array($this->lac_pages,'lac_page') );
+		$page3 = add_submenu_page('live-admin-customizer', 'View Themes', 'View Themes', 'administrator', 'lac-view-existing-page', array($this->lac_pages,'lac_vex_page'));
 		# Register Style & Script
 		$this->register_script_style(); 
 		add_action( 'admin_print_styles-' . $page1, array($this,'enqueue_script_style') );
@@ -217,6 +218,50 @@ class Live_Admin_Customizer {
     	wp_admin_css_color('matt_pink','Matt Pink',$url.'Matt_Pink/Matt_Pink.css',array("#c7325c", "#edebec", "#d9184e", "#a80c38", "#e80948", "#c25775", "#7d1b39", "#ffadc5", "#700a27", "#ffffff", "#630422"),array("#c7325c", "#edebec", "#d9184e", "#a80c38", "#e80948", "#c25775", "#7d1b39", "#ffadc5", "#700a27", "#ffffff", "#630422"));
     	wp_admin_css_color('matt_red','Matt Red',$url.'Matt_Red/Matt_Red.css',array("#ba2d2d", "#ebe8eb", "#de1829", "#e3a8ad", "#780a13", "#a3000e", "#ebced1", "#ba9b9d", "#5e020a", "#bababa", "#f5f0f0", "#dedede", "#b00c0c"),array("#ba2d2d", "#ebe8eb", "#de1829", "#e3a8ad", "#780a13", "#a3000e", "#ebced1", "#ba9b9d", "#5e020a", "#bababa", "#f5f0f0", "#dedede", "#b00c0c"));
     	wp_admin_css_color('3_Color','3 Color',$url.'3_Color/3_Color.css',array("#1c141c", "#7a2602", "#bababa", "#541d05", "#912c00", "#ffffff", "#ffffff", "#5e1e02"),array("#1c141c", "#7a2602", "#bababa", "#541d05", "#912c00", "#ffffff", "#ffffff", "#5e1e02"));
+    }
+
+    /**
+     * Check For Theme Edit Action.
+     * @since 0.2
+     * @access public
+     */
+    public function edit_exSCSS(){
+        if(isset($_GET['action']) && $_GET['action'] == 'edit' && isset($_GET['theme']) ){
+            $this->lac_pages->scss_output = $this->read_scss($_GET['theme']);    
+        }
+        
+    }
+    
+    /**
+     * Reads The Theme File.
+     * @param   string Theme Slug
+     * @returns Array
+     * @since 0.2
+     */
+    public function read_scss($slug){
+        $scss_file = lac_style_path.$slug.'/'.$slug.'.scss';
+        $css_file = lac_style_path.$slug.'/'.$slug.'.css';
+        
+        if (! file_exists($scss_file)) {
+            return null;
+        }
+        
+        $name = $this->file_meta($css_file);
+        $file = fopen($scss_file,"r");
+        $contents = fread($file, filesize($scss_file));
+        $search = array('$',':',';','
+',' ');
+        $replace = array('','=','','&','');
+        $scss_variable = str_replace($search,$replace,$contents); 
+        parse_str($scss_variable, $output);
+        foreach($output as $opk => $opv){
+            if($opv == null || $opv == 'null'){
+                $output[$opk] = '';
+            }
+        }
+        
+        $output['file_base_name'] = $name['name'];
+        return $output;
     }
 
 }

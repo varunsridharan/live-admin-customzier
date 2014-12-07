@@ -9,6 +9,7 @@ $link: #0074a2 !default;
 $link-focus: lighten( $link, 10% ) !default;
 $action-color: $highlight-color !default;
 $button-color: $action-color !default;
+$secondary-button-color: lighten( $action-color, 50% ) !default;
 $form-checked: $highlight-color !default;
 $menu-text: $text-color !default;
 $menu-icon: $icon-color !default;

@@ -6,13 +6,13 @@
 			<tr>
 				<th>Colour</th>
 				<td>
-					<input type="text" placeholder="Pick A Colour" name="colors[link]" data-color="yes" value="" class="lacc_colorpicker">
+					<input type="text" placeholder="Pick A Colour" name="colors[link]" data-color="yes" value="<?php echo $this->scss_val('link'); ?>" class="lacc_colorpicker">
 				</td>
 			</tr>
 			<tr>
 				<th>Focus Colour</th>
 				<td>
-					<input type="text" placeholder="Pick A Colour" name="colors[link-focus]" data-color="yes" value="" class="lacc_colorpicker">
+					<input type="text" placeholder="Pick A Colour" name="colors[link-focus]" data-color="yes" value="<?php echo $this->scss_val('link-focus'); ?>" class="lacc_colorpicker">
 				</td>
 			</tr>
 		</tbody>
@@ -24,7 +24,7 @@
 			<tr>
 				<th>Form Checked</th>
 				<td>
-					<input type="text" placeholder="Pick A Colour" name="colors[form-checked]" data-color="yes" value="" class="lacc_colorpicker">
+					<input type="text" placeholder="Pick A Colour" name="colors[form-checked]" data-color="yes" value="<?php echo $this->scss_val('form-checked'); ?>" class="lacc_colorpicker">
 				</td>
 			</tr>
 		</tbody>

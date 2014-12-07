@@ -9,7 +9,7 @@
 	<table cellspacing="10" cellpadding="10">
     	<tr>
         	<th>Style Name</th>
-            <td><input type="text" name="styleName" value=""   />
+            <td><input type="text" name="styleName" value="<?php echo $this->scss_val('file_base_name'); ?>"   />
 			    <input type="hidden" name="current_user" value="<?php echo $current_user->user_login; ?>" />
 			</td>
         </tr> 
@@ -17,10 +17,10 @@
     </table>
     <hr/>
 	<?php 
-	require(lac_path.'views/create_new/general.php'); 
-	require(lac_path.'views/create_new/linksforms.php');
-	require(lac_path.'views/create_new/menu.php');
-	require(lac_path.'views/create_new/adminbar.php');
+        require(lac_path.'views/create_new/general.php'); 
+        require(lac_path.'views/create_new/linksforms.php');
+        require(lac_path.'views/create_new/menu.php');
+        require(lac_path.'views/create_new/adminbar.php');
 	?>
 	 <hr/>
 	<table cellspacing="10" cellpadding="10">

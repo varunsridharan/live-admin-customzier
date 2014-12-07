@@ -12,7 +12,21 @@
 if ( ! defined( 'lac_path' ) ) exit;
 
 class Live_Admin_Customizer_Page {
- 
+    public $scss_output;
+    
+    function __construct() {
+        $this->scss_output = array();
+    }
+    
+    public function scss_val($key){
+        if(is_array($this->scss_output) && isset($this->scss_output[$key])){
+            return $this->scss_output[$key];
+        } else {
+            return '';
+        }
+
+    }
+    
 	public function lac_page(){
 		$current_user = wp_get_current_user();
 		$pageName = "Create New Theme";

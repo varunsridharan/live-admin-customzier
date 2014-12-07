@@ -4,7 +4,7 @@ table tr th{border-width:1px;padding:8px;border-style:solid;border-color:#666;ba
 table tr td{border-width:1px;padding:8px;border-style:solid;border-color:#666;background-color:#fff}
 
 
-
+.nav-tab{cursor: pointer;}
 
 
 table{text-align:left;}
