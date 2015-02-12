@@ -1,12 +1,12 @@
 ===Live Admin Customizer===
-Contributors: varunms,karthikskr
+Contributors: varunms
 Author URI: http://varunsridharan.in/
 Plugin URL: https://wordpress.org/plugins/live-admin-customizer/
 Donate link: http://varunsridharan.in/
 Tags:admin,theme,changer,admin themes,color,roleover,role over,customizer,color picker,color changer,modifier,beautifier 
 Requires at least: 3.5
-Tested up to: 4.0.1
-Stable tag: 0.2
+Tested up to: 4.1
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -17,15 +17,18 @@ Create Customized theme for wordpress admin panel
 
 Create Customized theme for wordpress admin panel. with out any code
 
-<h4> What's New In 0.2 </h4>
-* Edit Created Theme
-* Option To Customize Secondary Button Class `button button-secondary`
-
+<h4> What's New In 0.3 </h4>
+* Auto Enques Admin Bar Css In Front End
 <h4>Plugin Feature List</h4>
 * Built-in 5 Admin Themes
 * Create New Themes
+* Edit Created Theme
 * Delete Created Existing Themes
 
+<h4>How To Disable Admin Bar Css File </h4>
+Use This Filter `lac_front_adminbar_css` Or Add The Below Code In Your Themes **Functions.php**
+`add_filter('lac_front_adminbar_css','remove_lac_front_adminbar_css_file');
+function remove_lac_front_adminbar_css_file(){return false;}`
  
 == Installation ==
 
@@ -45,6 +48,8 @@ This section describes how to install the plugin and get it working.
 
 
 == Frequently Asked Questions ==
+**How I Can Remove Admin Bar Css File In Front End**
+Use This Filter `lac_front_adminbar_css`
 
 **I have an idea for your plugin!**  
 That's great. We are always open to your input, and we would like to add anything we think will be useful to a lot of people. Please send your comment/idea to <a href="mailto:varunsridharan23@gmail.com">varunsridharan23@gmail.com</a>
@@ -53,6 +58,9 @@ That's great. We are always open to your input, and we would like to add anythin
 Oops. Please User github / WordPress to post bugs. Github : https://github.com/technofreaky/Live-Admin-Customizer
 
 == Changelog ==
+= 0.3 =
+* Admin Bar Css Now Hookable To Front End.
+
 = 0.2 =
 * Small Bug Fix With WP Old Version
 * Added Theme Edit Option

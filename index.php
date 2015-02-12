@@ -14,10 +14,11 @@
  * Description: Create Beautifyl Admin Themes With Live Admin Customizer
  * Author:      Varun Sridharan
  * Author URI:  http://varunsridharan.in/
- * Version:     0.2
+ * Version:     0.3
  * License:     GPL
  */
 
+global $admin_colors;
 
 /* Exit if accessed directly */
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -27,8 +28,7 @@ define('lac_url',plugins_url('',__FILE__).'/');
 define('lac_path',plugin_dir_path( __FILE__ ));
 define('lac_style_url',content_url().'/live_admin_customizer/user_style/');
 define('lac_style_path',ABSPATH. 'wp-content/live_admin_customizer/user_style/');
-
-
+ 
 class Live_Admin_Customizer {
 	
 	public $lac_v;
@@ -59,6 +59,7 @@ class Live_Admin_Customizer {
 		add_action( 'admin_post_lac_scss_compile',array($this,'scss_compile') );
 		add_action( 'admin_post_lac_scss_create', array($this,'scss_create') );
 		add_action( 'admin_post_lac_scss_delete', array($this,'scss_delete') );
+		add_action(	'wp_enqueue_scripts',array($this,'wp_admin_bar_css'));
  	}
 
 	
@@ -192,7 +193,32 @@ class Live_Admin_Customizer {
     	$this->css_files = $Got_files;  
     	return $Got_files;  	
     }
+     
     
+    /**
+     * Reads All Files & Folders From [lac_style_path] for admin bar css 
+     * @since 0.3
+     * @access private
+     * @return null
+     */
+    private function get_admin_css_files($name,$return = 'url'){
+    	$Got_files = array();
+		$name = strtolower($name);
+    	$scanDir = scandir(lac_style_path);
+    	foreach($scanDir as $folder){
+    		if($folder == '.' || $folder == '..'){continue;}
+			if(strtolower($folder) == $name ){
+				if(file_exists(lac_style_path.$folder.'/'.$folder.'_admin_bar.css')) {
+					if($return == 'url'){
+						return lac_style_url.$folder.'/'.$folder.'_admin_bar.css';
+					} else {
+						return lac_style_path.$folder.'/'.$folder.'_admin_bar.css';
+					}
+				}
+			}
+    	}
+		return false;
+	}
     
     /**
      * Enques The Existing Styles To Profile Page
@@ -220,6 +246,20 @@ class Live_Admin_Customizer {
     	wp_admin_css_color('3_Color','3 Color',$url.'3_Color/3_Color.css',array("#1c141c", "#7a2602", "#bababa", "#541d05", "#912c00", "#ffffff", "#ffffff", "#5e1e02"),array("#1c141c", "#7a2602", "#bababa", "#541d05", "#912c00", "#ffffff", "#ffffff", "#5e1e02"));
     }
 
+	/**
+	 * Enques Admin bar Theme In WP FRONT END
+	 * @since 0.3
+	 */
+	public function wp_admin_bar_css(){
+        if(apply_filters('lac_front_adminbar_css',true )){
+            $current_userid = get_current_user_id( );
+            $user_style = get_user_meta($current_userid, 'admin_color', true);
+            $src = $this->get_admin_css_files($user_style); 
+            if($src) {wp_enqueue_style('live_admin_customizer_admin_bar_css',$src);}
+            return false;
+        }
+	}
+	
     /**
      * Check For Theme Edit Action.
      * @since 0.2

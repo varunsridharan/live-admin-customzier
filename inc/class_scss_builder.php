@@ -17,6 +17,7 @@ class Live_Admin_Customizer_Scss_Builder {
  	public $defined_variables;
  	public $defined_functions;
  	public $defined_base_scss;
+	public $defined_admin_bar_scss;
  	public $post_colors;
 	/**
 	 * Generates SCSS Code, Requires SCSS Complier Files
@@ -42,6 +43,7 @@ class Live_Admin_Customizer_Scss_Builder {
 		$this->defined_variables = file_get_contents(lac_path.'scss_base/variables.scss');
 		$this->defined_functions = file_get_contents(lac_path.'scss_base/mixins.scss');
 		$this->defined_base_scss = file_get_contents(lac_path.'scss_base/base.scss');
+		$this->defined_admin_bar_scss = file_get_contents(lac_path.'scss_base/admin_bar.scss');
 	}
 	
 	/**
@@ -142,6 +144,15 @@ color: ".$this->post_colors."
 	}
 	
 	/**
+	 * Generates CSS Code From SCSS Code For Admin Bar
+	 * @since 0.3
+	 * @access public
+	 * @return CSS Code
+	 */
+	public function scss_admin_bar_compile_code(){
+		return $this->scss_class->compile($this->scss_generated_variable.$this->defined_variables.$this->defined_functions.$this->defined_admin_bar_scss);
+	}	
+	/**
 	 * Creates New Style In USER CSS Folder
 	 * @since 0.1
 	 * @access public
@@ -155,6 +166,7 @@ color: ".$this->post_colors."
 			$styleSlug = $this->scss_replace($styleName);
 			$createdUser = $_REQUEST['current_user'];
 			$generated_scss = $this->scss_compile_code();
+			$admin_generated_scss = $this->scss_admin_bar_compile_code();
 			$metaData = $this->create_metaData($styleName,$styleSlug,$createdUser);
 			$metaData .= $generated_scss;
 			
@@ -162,11 +174,14 @@ color: ".$this->post_colors."
 				mkdir(lac_style_path.$styleSlug.'/', 0777);
 			}
 			
+			$admin_create_css_file = fopen(lac_style_path.$styleSlug.'/'.$styleSlug.'_admin_bar.css', "w") or die("Unable to open file!");
 			$create_css_file = fopen(lac_style_path.$styleSlug.'/'.$styleSlug.'.css', "w") or die("Unable to open file!");
 			$create_scss_file = fopen(lac_style_path.$styleSlug.'/'.$styleSlug.'.scss', "w") or die("Unable to open file!");
 			$css_write = fwrite($create_css_file, $metaData);
+			$admin_css_write = fwrite($admin_create_css_file,$admin_generated_scss);
 			$scss_write = fwrite($create_scss_file, $this->scss_generated_variable);
 			fclose($create_css_file);
+			fclose($admin_create_css_file);
 			fclose($create_scss_file);
 			
 			if($css_write && $scss_write){ echo 'saved';}
